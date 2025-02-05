@@ -29,6 +29,9 @@ same results as on a different process.
 
 Creating self-contained functions requires some care, see section
 below.
+
+Calling \code{crate()} on an existing crate will just return the crate,
+disregarding any \code{...} that may be supplied.
 }
 \section{Creating self-contained functions}{
 

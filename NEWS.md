@@ -1,5 +1,8 @@
 # carrier (development version)
 
+* Attempting to crate an existing crate will now return the crate instead of
+  erroring (@shikokuchuo, #13).
+
 # carrier 0.1.1
 
 * Crated functions no longer carry source references (#6).

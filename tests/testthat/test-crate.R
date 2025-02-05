@@ -114,3 +114,8 @@ test_that("function must be defined in the crate environment", {
 
   expect_s3_class(crate(set_env(fn)), "crate")
 })
+
+test_that("crating an existing crate returns the crate", {
+  fn <- crate(~NULL)
+  expect_identical(fn, crate(fn))
+})

@@ -17,6 +17,8 @@ NULL
 #' Creating self-contained functions requires some care, see section
 #' below.
 #'
+#' Calling `crate()` on an existing crate will just return the crate,
+#' disregarding any `...` that may be supplied.
 #'
 #' @section Creating self-contained functions:
 #'
@@ -74,15 +76,23 @@ NULL
 #' # set_env() function from rlang:
 #' crate(rlang::set_env(fn))
 crate <- function(.fn, ...) {
+
+  fn <- enexpr(.fn)
+
+  # return an existing crate 'as is'
+  if (is.symbol(fn) && is_crate(.fn)) {
+    return(.fn)
+  }
+
   # Evaluate arguments in a child of the caller so the caller context
   # is in scope and new data is created in a separate child
   env <- child_env(caller_env())
   dots <- exprs(...)
   locally(!!!dots, .env = env)
 
-  # Quote and evaluate in the local env to avoid capturing execution
-  # envs when user passed an unevaluated function or formula
-  fn <- eval_bare(enexpr(.fn), env)
+  # Take quoted expression and evaluate in the local env to avoid capturing
+  # execution envs when user passed an unevaluated function or formula
+  fn <- eval_bare(fn, env)
 
   # Isolate the evaluation environment from the search path
   env_poke_parent(env, base_env())
